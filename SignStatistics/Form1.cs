@@ -92,30 +92,6 @@ namespace SignStatistics
                 signTableSheet.Cells[1, 2].Value2 = "单位";
                 int signTableIndex = 2;
 
-                //Dictionary<string, List<String>> signUserDic = new Dictionary<string, List<String>>();
-                //while (signTableSheet.Cells[signTableIndex, 1].Value2 != null)
-                //{
-                //    String name = signTableSheet.Cells[signTableIndex, 1].Value2.ToString();
-                //    List<String> signUserDepartmentList = new List<string>();
-                //    int allMemberTableIndex = 2;
-                //    int setIndex = 2;// 部门的字段位置
-                //    while (allMemberTableSheet.Cells[allMemberTableIndex, 1].Value2 != null)
-                //    {
-                //        if (allMemberTableSheet.Cells[allMemberTableIndex, 1].Value2.ToString() == name)
-                //        {
-                //            //signTableSheet.Cells[signTableIndex, setIndex].Value2 = allMemberTableSheet.Cells[allMemberTableIndex, 2].Value2;
-                //            signUserDepartmentList.Add(allMemberTableSheet.Cells[allMemberTableIndex, 2].Value2);
-                //            setIndex++;
-                //        }
-                //        allMemberTableIndex++;
-                //    }
-                //    signUserDic.Add(name, signUserDepartmentList);
-                //    //设置进度条的值
-                //    this.Invoke(new setProgressBarValue_dg(setProgressBarValue), (int)(signTableIndex * 100 / signTableSheet.UsedRange.Rows.Count));
-                //    signTableIndex++;
-                //}
-                //var sortedDict = signUserDic.OrderBy(x => x.Value[0]).ToDictionary(x => x.Key, x => x.Value);
-
                 Dictionary<string, List<String>> departmentDic = new Dictionary<string, List<String>>();
                 List<String> repetitionNameList = new List<string>();
                 departmentDic.Add("无对应部门", new List<string>());
@@ -123,12 +99,15 @@ namespace SignStatistics
                 {
                     String name = signTableSheet.Cells[signTableIndex, 1].Value2.ToString();
                     int allMemberTableIndex = 2;
+                    int setIndex = 2;// 部门的字段位置
                     List<String> departmentList = new List<string>();
                     while (allMemberTableSheet.Cells[allMemberTableIndex, 1].Value2 != null)
                     {
                         if (allMemberTableSheet.Cells[allMemberTableIndex, 1].Value2.ToString() == name)
                         {
                             String department = allMemberTableSheet.Cells[allMemberTableIndex, 2].Value2;
+                            signTableSheet.Cells[signTableIndex, setIndex].Value2 = department;
+                            setIndex++;
                             if (departmentDic.ContainsKey(department) && !departmentDic[department].Contains(name))
                             {
                                 departmentDic[department].Add(name);
@@ -188,7 +167,7 @@ namespace SignStatistics
                             exportWorksheet.Cells.Cells[departmentCellIndex, 2].Value2 = name;
                             if (repetitionNameList.Contains(name))
                             {
-                                exportWorksheet.Range[exportWorksheet.Cells[departmentCellIndex, 2], exportWorksheet.Cells[departmentCellIndex, 3]].Interior.ColorIndex = 3;
+                                exportWorksheet.Range[exportWorksheet.Cells[departmentCellIndex, 2], exportWorksheet.Cells[departmentCellIndex, 2]].Interior.ColorIndex = 3;
                             }
                             departmentCellIndex++;
                         }
